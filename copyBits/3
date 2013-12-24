@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <math.h>
+
+
+
+
+
+void copyBits(int x, int y, short int sourceIndex, short int destinationIndex, short int length);
+void printBinary(int x);
+
+int main(){
+
+  int x = 4; // 0100
+  int y = 1; // 0001
+  short int sourceIndex = 0;
+  short int destinationIndex = 1;
+  short int length  = 1;
+  copyBits(x, y, sourceIndex, length, destinationIndex); //result should be: 0110
+  return 0;
+}
+
+
+
+void copyBits(int x, int y, short int sourceIndex, short int length, short int destinationIndex){
+
+  if(sourceIndex < 0 || sourceIndex > (sizeof(int)*8 -1) ){
+    //invalid source index
+    printf("Invalid source index\n");
+  }
+
+  if(length<1 || sourceIndex-length < -1){
+    printf("Invalid length\n");
+  }
+
+  if(destinationIndex > (sizeof(int)*8 + 1) || destinationIndex < 0 ){
+    printf("Invalid destination index\n");
+  }
+
+  //1. create mask with just bits being transferred
+  int mask = 0; // 0000
+  for(int i = sourceIndex; i > sourceIndex-length; i--){
+    mask += (int)pow(2, i);
+  }
+  int copyBits = mask & x;  // just bits being copied
+
+  //2. shift result to destination index
+  if(sourceIndex > destinationIndex){
+    mask = mask >> (sourceIndex-destinationIndex);
+  }else{
+    mask = mask << (destinationIndex - sourceIndex);
+  }
+  //3. clear y's bits at destination index
+  for(int i = destinationIndex; i >= (destinationIndex-length) && i >= 0; i--){
+
+  }
+  //4. or with the result at step 2
+
+}
+
+void printBinary(int x){
+
+  int totalBits = (int)sizeof(int)*8;
+  int startNumber = (int)pow(2, totalBits-1);
+  printf("%d = ", x );
+  for(unsigned int i = startNumber; i > 0; i = i>>1){
+    if( (x & i) == i ){
+      printf("1");
+    }else{
+      printf("0");
+    }
+  }
+  printf("\n");
+}
